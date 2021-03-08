@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
+using Shared.Estimates;
 
-namespace EFDataAccessLibrary.Features.Estimates
+namespace WebAPI.Profiles
 {
     public class EstimateProfile : Profile
     {
