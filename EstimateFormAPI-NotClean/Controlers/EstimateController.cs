@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using MediatR;
-using EFDataAccessLibrary.Features.Estimates;
+using Shared.Estimates;
 using WebAPI.Commands;
 using WebAPI.Queries;
 

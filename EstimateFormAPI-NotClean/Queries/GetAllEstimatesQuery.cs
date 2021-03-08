@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using EFDataAccessLibrary.Features.Estimates;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using Shared.Estimates;
 
 namespace WebAPI.Queries
 {
@@ -11,16 +11,16 @@ namespace WebAPI.Queries
     {
         public class GetAllEstimatesQueryHandler : IRequestHandler<GetAllEstimatesQuery, List<Estimate>>
         {
-            private readonly EstimateContext _db;
+            private readonly IEstimateRepository _repository;
 
-            public GetAllEstimatesQueryHandler(EstimateContext db)
+            public GetAllEstimatesQueryHandler(IEstimateRepository estimateRepository)
             {
-                _db = db;
+                _repository = estimateRepository;
             }
 
             public async Task<List<Estimate>> Handle(GetAllEstimatesQuery request, CancellationToken cancellationToken)
             {
-                return await _db.Estimates.ToListAsync(cancellationToken);
+                return await _repository.GetAllEstimates(cancellationToken) as List<Estimate>;
             }
         }
     }

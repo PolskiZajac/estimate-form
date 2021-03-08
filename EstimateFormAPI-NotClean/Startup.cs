@@ -33,6 +33,7 @@ namespace WebAPI
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "EstimateFormAPI_NotClean", Version = "v1" });
             });
+            services.AddScoped(typeof(IEstimateRepository), typeof(EstimateRepository));
             services.AddMediatR(typeof(Startup));
         }
 

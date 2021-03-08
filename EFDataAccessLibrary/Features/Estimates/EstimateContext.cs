@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Shared.Estimates;
+
 
 namespace EFDataAccessLibrary.Features.Estimates
 {
