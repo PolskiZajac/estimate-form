@@ -2,8 +2,7 @@
 using System.Threading.Tasks;
 using EFDataAccessLibrary.Features.Estimates;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using WebAPI.Exceptions;
+using Shared.Estimates;
 
 namespace WebAPI.Queries
 {
@@ -18,18 +17,17 @@ namespace WebAPI.Queries
 
         public class GetEstimateByIdQueryHandler : IRequestHandler<GetEstimateByIdQuery, Estimate>
         {
-            private readonly EstimateContext _db;
+            private readonly IEstimateRepository _repository;
 
-            public GetEstimateByIdQueryHandler(EstimateContext db)
+            public GetEstimateByIdQueryHandler( IEstimateRepository repository)
             {
-                _db = db;
+                _repository = repository;
             }
 
 
             public async Task<Estimate> Handle(GetEstimateByIdQuery request, CancellationToken cancellationToken)
             {
-                var record = _db.Estimates.SingleOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
-                return await (record.Result != null ? record : throw new EstimateNotFoundException(request.Id));
+                return await _repository.GetEstimateById(request.Id, cancellationToken);
             }
         }
     }
