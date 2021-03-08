@@ -2,8 +2,7 @@
 using System.Threading.Tasks;
 using EFDataAccessLibrary.Features.Estimates;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using WebAPI.Exceptions;
+using Shared.Estimates;
 
 namespace WebAPI.Commands
 {
@@ -20,22 +19,16 @@ namespace WebAPI.Commands
 
         public class UpdateEstimateByIdCommandHandler : IRequestHandler<UpdateEstimateByIdCommand>
         {
-            private readonly EstimateContext _db;
+            private readonly IEstimateRepository _repository;
 
-            public UpdateEstimateByIdCommandHandler(EstimateContext db)
+            public UpdateEstimateByIdCommandHandler(IEstimateRepository repository)
             {
-                _db = db;
+                _repository = repository;
             }
 
             public async Task<Unit> Handle(UpdateEstimateByIdCommand request, CancellationToken cancellationToken)
             {
-                if (request.Value == null) throw new EstimateNotComplete();
-                var record = await _db.Estimates.SingleOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
-                if (record == null) throw new EstimateNotFoundException(request.Id);
-                record.Name = request.Value.Name;
-                record.Type = request.Value.Type;
-                record.Value = request.Value.Value;
-                await _db.SaveChangesAsync(cancellationToken);
+                await _repository.UpdateEstimate(request.Id, request.Value, cancellationToken);
                 return Unit.Value;
             }
         }

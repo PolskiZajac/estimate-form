@@ -1,7 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using EFDataAccessLibrary.Features.Estimates;
 using MediatR;
+using EFDataAccessLibrary.Features.Estimates;
+using Shared.Estimates;
+using Shared.Exceptions;
 
 namespace WebAPI.Commands
 {
@@ -15,17 +17,16 @@ namespace WebAPI.Commands
 
         public class CreateEstimateCommandHandler : IRequestHandler<CreateEstimateCommand>
         {
-            private readonly EstimateContext _db;
+            private readonly IEstimateRepository _repository;
 
-            public CreateEstimateCommandHandler(EstimateContext db)
+            public CreateEstimateCommandHandler(IEstimateRepository estimateRepository)
             {
-                _db = db;
+                _repository = estimateRepository;
             }
 
             public async Task<Unit> Handle(CreateEstimateCommand request, CancellationToken cancellationToken)
             {
-                await _db.Estimates.AddAsync(request.Value, cancellationToken);
-                await _db.SaveChangesAsync(cancellationToken);
+                await _repository.AddEstimate(request.Value, cancellationToken);
                 return Unit.Value;
             }
         }
